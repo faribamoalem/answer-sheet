@@ -1,4 +1,3 @@
-
 import cv2
 
 # Load the image
@@ -58,13 +57,13 @@ for i, contour in enumerate(sorted_contours):
     roi = binary[y:y + enlarged_h, x:x + enlarged_w]
 
     # Divide the region into 6 equal parts
-    section_width = enlarged_w // 6
+    section_width = enlarged_w // 5
 
     # Initialize the detected filled option as none
     filled_option = ""
 
     # Loop over the sections and check for filled options
-    for section in range(1, 6):
+    for section in range(5):
         section_roi = roi[:, section_width * section:section_width * (section + 1)]
 
         # Check if the section contains any contours
@@ -75,8 +74,10 @@ for i, contour in enumerate(sorted_contours):
             filled_option = chr(ord('A') + section)
             for c in section_contours:
                 area = cv2.contourArea(c)
-                if area >= 40:  # Ignore areas with an area less than 40
-                    print(f"Question {i + 1} area: {area}")
+                if area >= 200:  # Ignore areas with an area less than 200
+                    pass#print(f"Question {i + 1} area: {area}")
+                else:
+                    filled_option = ""  # Reset filled option as area < 200
             break  # Break the loop if a filled option is found
 
     # Print the question number and filled option
@@ -93,3 +94,6 @@ resized_image = cv2.resize(image, (800, 900))
 cv2.imshow('Single-Answer Detection', resized_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+
